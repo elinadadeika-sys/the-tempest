@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Second Life Stage</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@700;900&family=Archivo:wght@400;600;800&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+/* Layout: one phone-first column (max 760px) of kraft "sections" — the lobby poster, unfolded into a scroll. Single deliberate kraft look in both themes. */
+:root{
+  --kraft:#C9A672; --kraft-deep:#8C6D3F; --paper:#F4EEE2; --ink:#1E1B16; --ink-soft:#4A3E2C;
+  --rust:#A8340F; --brown:#5A4628;
+  --display:'Big Shoulders Stencil Display', 'Impact', 'Arial Narrow', sans-serif;
+  --body:'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --mono:'Courier Prime', 'Courier New', monospace;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{background:var(--kraft)}
+body{background:var(--kraft);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 48px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.9;margin:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+.label{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+.paper{background:var(--paper);box-shadow:0 4px 0 rgba(30,27,22,.25)}
+section{display:flex;flex-direction:column;gap:18px}
+section > header{display:flex;flex-direction:column;gap:6px}
+section > header .label{color:var(--rust)}
+h2{font-size:clamp(40px, 9vw, 60px)}
+.draft{background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:13px;letter-spacing:.06em;padding:8px 14px;text-align:center;margin:0 calc(-1 * max(16px, env(safe-area-inset-left, 0px)))}
+
+/* hero */
+.hero{padding-top:36px;display:flex;flex-direction:column;gap:14px}
+.hero h1{font-size:clamp(84px, 22vw, 168px);line-height:.8}
+.hero .tag{align-self:flex-start;background:var(--ink);color:var(--paper);font-weight:600;font-size:clamp(17px,4vw,21px);padding:10px 16px;transform:rotate(-1deg)}
+.hero .rule{border:3px solid var(--ink);padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.hero .rule strong{font-size:22px;line-height:1.25}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.stat{padding:18px;display:flex;flex-direction:column;gap:2px}
+.stat:nth-child(odd){transform:rotate(-.6deg)}
+.stat:nth-child(even){transform:rotate(.6deg)}
+.stat b{font-family:var(--display);font-weight:900;font-size:clamp(48px,12vw,72px);line-height:1;color:var(--rust);font-variant-numeric:tabular-nums}
+.stat span{font-weight:600;font-size:16px}
+.stat:first-child{background:var(--ink);color:var(--paper)}
+.stat:first-child b{color:var(--kraft)}
+
+/* bars */
+.bars{padding:20px;display:flex;flex-direction:column;gap:14px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:baseline}
+.bar .name{font-weight:600;min-width:0}
+.bar .val{font-family:var(--mono);font-weight:700;font-variant-numeric:tabular-nums}
+.bar .track{grid-column:1 / -1;height:16px;background:repeating-linear-gradient(90deg, transparent 0 8px, rgba(140,109,63,.25) 8px 10px);border:2px solid var(--ink)}
+.bar .fill{height:100%;background:var(--ink)}
+.bar:first-child .fill{background:var(--rust)}
+.note{font-size:14px;color:var(--ink-soft)}
+
+/* pieces */
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{font-family:var(--display);font-weight:900;font-size:24px;text-transform:uppercase;letter-spacing:.04em;
+  min-height:48px;padding:6px 18px;border:3px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.tabs button:focus-visible, .spot input:focus-visible + .box, .copy:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.piece{padding:20px;display:flex;flex-direction:column;gap:18px}
+.piece h3{font-size:clamp(36px,8vw,48px)}
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stage{display:flex;flex-direction:column;gap:6px}
+.photo{aspect-ratio:3/4;max-width:100%;border:3px dashed var(--kraft-deep);display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:12px;color:var(--brown);text-align:center;padding:6px;background:#EAE1CF}
+.stage .tagl{font-family:var(--display);font-weight:900;font-size:20px;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--paper);padding:3px 0}
+.stage:nth-child(1) .tagl{background:var(--ink)}
+.stage:nth-child(2) .tagl{background:var(--brown)}
+.stage:nth-child(3) .tagl{background:var(--rust)}
+.facts{display:flex;flex-direction:column;margin:0;border-top:2px solid var(--ink)}
+.facts div{display:grid;grid-template-columns:minmax(120px, 38%) minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--kraft-deep)}
+.facts dt{font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.05em;text-transform:uppercase}
+.facts dd{margin:0;min-width:0}
+.quote{border-left:6px solid var(--rust);padding-left:14px;font-style:italic}
+.quote cite{display:block;font-style:normal;font-family:var(--mono);font-weight:700;font-size:13px;margin-top:4px}
+
+/* spot it */
+.spots{padding:8px 20px;display:flex;flex-direction:column}
+.spot{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--kraft-deep);cursor:pointer;min-height:56px}
+.spot:last-child{border-bottom:0}
+.spot input{position:absolute;opacity:0;width:1px;height:1px}
+.box{flex:none;width:32px;height:32px;border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:22px;color:transparent}
+.spot input:checked + .box{background:var(--rust);border-color:var(--rust);color:var(--paper)}
+.spot input:checked ~ .txt{text-decoration:line-through;text-decoration-thickness:2px;color:var(--ink-soft)}
+.progress{font-family:var(--mono);font-weight:700}
+
+/* after */
+.after{background:var(--ink);color:var(--paper);padding:24px;display:flex;flex-direction:column;gap:14px}
+.after h2{color:var(--kraft)}
+.contact{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.contact code{font-family:var(--mono);font-size:16px;background:var(--paper);color:var(--ink);padding:8px 12px;user-select:all;min-width:0;overflow-wrap:anywhere}
+.copy{font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;min-height:44px;padding:8px 16px;border:2px solid var(--kraft);background:transparent;color:var(--kraft);cursor:pointer}
+footer{font-family:var(--mono);font-size:13px;color:var(--ink-soft);text-align:center}
+
+@media (min-width:640px){ .stats{grid-template-columns:repeat(4,minmax(0,1fr))} .stat b{font-size:56px} }
+@media (prefers-reduced-motion:no-preference){ .bar .fill{transition:width .8s ease-out} }
+</style>
+</head>
+<body>
+
+<div class="draft" id="draft">DRAFT · All numbers below are example placeholders. Replace them with your real figures.</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="label">[SHOW TITLE] · Props &amp; Set Design Team</div>
+    <h1>Second Life</h1>
+    <div class="tag">Tonight's stage was built from things that already existed.</div>
+    <p>Theatre sets are often built for a few nights and then thrown away. This season we tried something different: before making anything, we looked for what already existed in storage, from past productions and from our community.</p>
+    <div class="rule paper">
+      <span class="label">Our one rule</span>
+      <strong>“Does this already exist somewhere?”</strong>
+      <span>New materials were only bought when safety required it.</span>
+    </div>
+  </div>
+
+  <section aria-labelledby="h-impact">
+    <header><span class="label">The impact</span><h2 id="h-impact">By the numbers</h2></header>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section aria-labelledby="h-sources">
+    <header><span class="label">Where it came from</span><h2 id="h-sources">Sources</h2></header>
+    <div class="bars paper" id="sources"></div>
+    <p class="note">Share of all reused items, by where we found them.</p>
+  </section>
+
+  <section aria-labelledby="h-materials">
+    <header><span class="label">What it's made of</span><h2 id="h-materials">Materials saved</h2></header>
+    <div class="bars paper" id="materials"></div>
+    <p class="note">Approximate weight of each material we reused instead of buying new.</p>
+  </section>
+
+  <section aria-labelledby="h-pieces">
+    <header><span class="label">From storage to spotlight</span><h2 id="h-pieces">Three pieces</h2></header>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="piece paper" role="tabpanel" id="piece" aria-live="polite"></div>
+  </section>
+
+  <section aria-labelledby="h-spot">
+    <header><span class="label">During the show</span><h2 id="h-spot">Spot them on stage</h2></header>
+    <p>Tick each one off when you see it. <span class="progress" id="progress"></span></p>
+    <div class="spots paper" id="spots"></div>
+  </section>
+
+  <div class="after">
+    <span class="label" style="color:var(--paper)">After the show</span>
+    <h2>Third life</h2>
+    <p>When the run ends, everything goes back into storage, ready for a future production.</p>
+    <p><strong>Got something we could reuse?</strong> Furniture, fabric, wood, frames: get in touch.</p>
+    <div class="contact"><code id="email">[CONTACT EMAIL]</code><button class="copy" id="copy" type="button">Copy</button></div>
+  </div>
+
+  <footer>[SHOW TITLE] · [UNIVERSITY] · Props &amp; Set Design Team</footer>
+</div>
+
+<script>
+/* ===== EDIT YOUR DATA HERE ===== */
+const DATA = {
+  isDraft: true, // set to false once the numbers are real
+  stats: [
+    { value: "120", label: "items reused" },
+    { value: "340 kg", label: "kept out of landfill" },
+    { value: "$2,400", label: "not spent on new" },
+    { value: "27", label: "people who donated" }
+  ],
+  sources: [ // percent of items
+    { name: "Past productions", value: 45 },
+    { name: "University storage", value: 25 },
+    { name: "Donations from students & staff", value: 20 },
+    { name: "Second-hand shops", value: 10 }
+  ],
+  materials: [ // kg
+    { name: "Wood & plywood", value: 160 },
+    { name: "Fabric & curtains", value: 70 },
+    { name: "Metal & hardware", value: 55 },
+    { name: "Furniture", value: 40 },
+    { name: "Cardboard & paper", value: 15 }
+  ],
+  pieces: [
+    { name: "[Piece one]", story: "[Where this piece came from, what the team saw in it, and how it was transformed.]",
+      facts: { "Originally": "[What it was]", "Materials": "[Wood, fabric…]", "What we changed": "[Cut, repainted…]", "Build time": "[## hours]", "New parts bought": "[None]" },
+      quote: "[A short quote from the person who built it]", by: "[Name], [role]" },
+    { name: "[Piece two]", story: "[Where this piece came from, what the team saw in it, and how it was transformed.]",
+      facts: { "Originally": "[What it was]", "Materials": "[Wood, fabric…]", "What we changed": "[Cut, repainted…]", "Build time": "[## hours]", "New parts bought": "[None]" },
+      quote: "[A short quote from the person who built it]", by: "[Name], [role]" },
+    { name: "[Piece three]", story: "[Where this piece came from, what the team saw in it, and how it was transformed.]",
+      facts: { "Originally": "[What it was]", "Materials": "[Wood, fabric…]", "What we changed": "[Cut, repainted…]", "Build time": "[## hours]", "New parts bought": "[None]" },
+      quote: "[A short quote from the person who built it]", by: "[Name], [role]" }
+  ],
+  spots: [
+    { prop: "[Prop on stage]", was: "[what it used to be]" },
+    { prop: "[Prop on stage]", was: "[what it used to be]" },
+    { prop: "[Prop on stage]", was: "[what it used to be]" },
+    { prop: "[Prop on stage]", was: "[what it used to be]" }
+  ]
+};
+/* ================================ */
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+$('draft').hidden = !DATA.isDraft;
+
+$('stats').innerHTML = DATA.stats.map(s =>
+  `<div class="stat paper"><b>${esc(s.value)}</b><span>${esc(s.label)}</span></div>`).join('');
+
+function bars(el, rows, unit) {
+  const max = Math.max(...rows.map(r => r.value));
+  el.innerHTML = rows.map(r =>
+    `<div class="bar"><span class="name">${esc(r.name)}</span><span class="val">${r.value}${unit}</span>
+     <div class="track" role="img" aria-label="${esc(r.name)}: ${r.value}${unit}"><div class="fill" style="width:${(r.value / max * 100).toFixed(1)}%"></div></div></div>`).join('');
+}
+bars($('sources'), DATA.sources, '%');
+bars($('materials'), DATA.materials, ' kg');
+
+let current = 0;
+function renderTabs() {
+  $('tabs').innerHTML = DATA.pieces.map((p, i) =>
+    `<button type="button" role="tab" id="tab-${i}" aria-selected="${i === current}" aria-controls="piece">Piece 0${i + 1}</button>`).join('');
+  DATA.pieces.forEach((_, i) => $('tab-' + i).addEventListener('click', () => { current = i; renderTabs(); renderPiece(); }));
+}
+function renderPiece() {
+  const p = DATA.pieces[current];
+  const stage = (t) => `<div class="stage"><div class="photo">PHOTO: ${t.toUpperCase()}</div><div class="tagl">${t}</div></div>`;
+  $('piece').setAttribute('aria-labelledby', 'tab-' + current);
+  $('piece').innerHTML = `
+    <h3>${esc(p.name)}</h3>
+    <div class="stages">${stage('Before')}${stage('During')}${stage('After')}</div>
+    <p>${esc(p.story)}</p>
+    <dl class="facts">${Object.entries(p.facts).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+    <p class="quote">“${esc(p.quote)}”<cite>— ${esc(p.by)}</cite></p>`;
+}
+renderTabs(); renderPiece();
+
+const KEY = 'second-life-spots';
+let found = [];
+try { found = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { found = []; }
+function renderSpots() {
+  $('spots').innerHTML = DATA.spots.map((s, i) =>
+    `<label class="spot" for="spot-${i}"><input type="checkbox" id="spot-${i}" ${found.includes(i) ? 'checked' : ''}>
+     <span class="box" aria-hidden="true">✓</span><span class="txt"><strong>${esc(s.prop)}</strong>, once ${esc(s.was)}</span></label>`).join('');
+  DATA.spots.forEach((_, i) => $('spot-' + i).addEventListener('change', (e) => {
+    found = e.target.checked ? [...new Set([...found, i])] : found.filter(x => x !== i);
+    try { localStorage.setItem(KEY, JSON.stringify(found)); } catch (err) {}
+    progress();
+  }));
+  progress();
+}
+function progress() {
+  const n = found.filter(i => i < DATA.spots.length).length;
+  $('progress').textContent = n === DATA.spots.length ? `All ${n} found!` : `${n} of ${DATA.spots.length} found.`;
+}
+renderSpots();
+
+$('copy').addEventListener('click', () => {
+  const text = $('email').textContent;
+  const done = () => { $('copy').textContent = 'Copied'; setTimeout(() => $('copy').textContent = 'Copy', 1600); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => selectEmail());
+  } else selectEmail();
+});
+function selectEmail() { const r = document.createRange(); r.selectNodeContents($('email')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+</script>
+</body>
+</html>
